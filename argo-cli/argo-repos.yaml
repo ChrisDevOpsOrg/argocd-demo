@@ -1,0 +1,34 @@
+---
+# Helm repo
+apiVersion: v1
+kind: Secret
+metadata:
+  name: traefik-repo
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  name: traefik
+  type: helm
+  project: infra
+  url: https://traefik.github.io/charts
+
+---
+# git repo
+apiVersion: v1
+kind: Secret
+metadata:
+  name: myapp-repo
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  name: myapp
+  type: git
+  project: infra
+  url: git@github.com:dummy/myapp.git
+  sshPrivateKey: |
+    -----BEGIN OPENSSH PRIVATE KEY-----
+    PUT-YOUR-KEY-HERE
+    -----END OPENSSH PRIVATE KEY-----
+

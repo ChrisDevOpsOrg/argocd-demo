@@ -1,0 +1,28 @@
+---
+# Helm repo
+apiVersion: v1
+kind: Secret
+metadata:
+  name: traefik-repo
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  name: traefik
+  type: helm
+  project: infra
+  url: https://traefik.github.io/charts
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: bitnami-repo
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  name: bitnami
+  type: helm
+  project: infra
+  url: https://charts.bitnami.com/bitnami

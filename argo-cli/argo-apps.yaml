@@ -1,0 +1,44 @@
+---
+apiVerison: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: traefik
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: traefik
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: ''
+    repoURL: 'https://traefik.github.io/charts'
+    targetRevision: 20.8.0
+    chart: traefik
+    helm:
+      parameters:
+        - name: deployment.replicas
+          value: '2'
+        - name: service.type
+          value: ClusterIP
+        - name: ports.traefik.expose
+          value: 'true'
+        - name: log.access.enabled
+          value: 'true'
+        - name: log.general.level
+          value: DEBUG
+        - name: providers.kubernetesCRD.enabled
+          value: 'true'
+        - name: providers.kubernetesCRD.allowCrossNamespace
+          value: 'true'
+        - name: providers.kubernetesCRD.allowEmptyServices
+          value: 'true'
+        - name: providers.kubernetesCRD.allowExternalNameServices
+          value: 'false'
+  project: infra
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
