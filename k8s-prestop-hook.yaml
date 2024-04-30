@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-k8s-playground
+  namespace: preprod
+  labels:
+    app: java-k8s-playground
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: java-k8s-playground
+  template:
+    metadata:
+      labels:
+        app: java-k8s-playground
+    spec:
+      containers:
+        - name: java-k8s-playground
+          image: dmetzler/java-k8s-playground
+          env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /q/health/live
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 10
+          readinessProbe:
+            failureThreshold: 15
+            httpGet:
+              path: /q/health/ready
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - sh
+                  - -c
+                  - "jmap -dump:live,format=b,file=/opt/gc-log/${POD_NAME}.hprof 1"
+          volumeMounts:
+            - name: gc-log
+              mountPath: /opt/gc-log
+      volumes:
+        - name: gc-log
+          persistentVolumeClaim:
+            claimName: service-gc-logs
