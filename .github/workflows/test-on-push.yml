@@ -1,10 +1,9 @@
 name: Test Job On Pull Request
  
 on:
-  pull_request:
+  push:
     branches:
-      - main
-    types: [opened, synchronize, reopened]
+      - develop
  
 permissions:
   contents: read
@@ -13,7 +12,7 @@ permissions:
  
 jobs:
   validate:
-    name: Test Validate PR
+    name: Test On Push
     runs-on: ubuntu-latest
     container:
       image: node:22.15.0-alpine
@@ -28,4 +27,4 @@ jobs:
  
       - name: Enable Corepack
         run: |
-          echo "This is another test job run on Pull Request"
+          echo "This is  test job run on Push"
