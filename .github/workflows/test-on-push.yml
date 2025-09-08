@@ -28,3 +28,29 @@ jobs:
       - name: Enable Corepack
         run: |
           echo "This is  test job run on Push"
+
+  Test_failed_job:
+    name: Fail This Job
+    runs-on: ubuntu-latest
+    container:
+      image: node:22.15.0-alpine
+      options: --user root
+    steps:
+      - name: Fail This Job
+        run: |
+          echo "force fail this job for testing"
+          exit 1
+        continue-on-error: true
+
+  Test_success_job:
+    name:  Success Job
+    runs-on: ubuntu-latest
+    container:
+      image: node:22.15.0-alpine
+      options: --user root
+    steps:
+      - name: Fail This Job
+        run: |
+          echo "Another Job for testing"
+
+
