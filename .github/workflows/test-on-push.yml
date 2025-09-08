@@ -1,9 +1,9 @@
 name: Test Job On Pull Request
  
 on:
-  push:
-    branches:
-      - develop
+  # push:
+  #   branches:
+  #     - develop
   pull_request:
     branches:
       - main
@@ -44,7 +44,7 @@ jobs:
         run: |
           echo "force fail this job for testing"
           exit 1
-        continue-on-error: true
+        # continue-on-error: true
 
   Test_success_job:
     name:  Success Job
